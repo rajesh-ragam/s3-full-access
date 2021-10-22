@@ -1,0 +1,194 @@
+variable "aws_region" {}
+variable "vpc_cidr" {}
+variable "vpc_name" {}
+variable "IGW_name" {}
+#variable "public_subnet1_cidr" {}
+#variable "public_subnet1_name" {}
+#variable "private_subnet_name" {}
+variable "Main_Routing_Table" {}
+variable "nat_name" {}
+#variable "private_subnet_name" {}
+variable "nat_Routing_Table" {}
+#variable "private_subnet1_name" {}
+#variable "private_Rout_Table" {}
+
+variable "create_vpc" {
+  description = "Controls if VPC should be created (it affects almost all resources)"
+  type        = bool
+  default     = true
+}
+variable "aws_route_table_association_public"{
+  description = "if you want to create aws_route_table_association_public  give true"
+  type        = bool
+  default     = false
+}
+
+variable "create_public_subnets"{
+  description = "if you want to create public subnets give true"
+  type        = bool
+  default     = true
+}
+
+variable "create_private_subnets"{
+  description = "if you want to create private subnets give true"
+  type        = bool
+  default     = true
+}
+
+variable "create_aws_instance"{
+  description = "if you want to create aws_instance give true"
+  type        = bool
+  default     = true
+}
+variable "create_nat_gateway"{
+  description = "if you want to create nat_gateway give true"
+  type        = bool
+  default     = true
+}
+
+variable "create_ebs_volume"{
+  description = "if you want to create ebs_volume give true"
+  type        = bool
+  default     = true
+}
+variable "ebs_volume_size" {
+  description = "ebsvolume_size"
+  type        = list(string)
+  default     = ["8"]
+}
+variable "ebs_volume_type"{
+  description = "ebs_volume_type"
+  type        = list(string)
+  default     = ["gp2"]
+}
+variable "volume_name"{
+  description = "device_name"
+  type        = list(string)
+  default     = ["/dev/xvda"]
+}
+
+variable "ebs_device_name"{
+  description = "device_name"
+  type        = list(string)
+  default     = ["xvdb"]
+}
+#variable "env" {
+#     default = test
+#}
+
+variable "snap-id"{
+  description = "snapshot_id"
+  type        = map(string)
+  default     = {
+            us-east-1 = "snap-0a4c045433cade1b2"
+   }
+}
+
+
+variable "iam_instance_profile" {
+  description = "IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
+  type        = string
+  default     = null
+}
+variable "allocate_public_ip" {
+  description = "allocate public ip to the instance "
+  type        = string
+  default     = false
+}
+
+variable "public_cidrs" {
+        description = "cidr blocks for subnets"
+        type    = list(string)
+        default = ["10.1.1.0/24", "10.1.2.0/24"]
+}
+
+variable "private_cidrs" {
+        description = "cidr blocks for subnets"
+        type    = list(string)
+        default = ["10.1.4.0/24", "10.1.5.0/24", "10.1.6.0/24", "10.1.7.0/24"]
+}
+
+variable "azs" {
+     description = " availabulity zones for subnets"
+     type    = list(string)
+     default = ["us-east-1a", "us-east-1b"]
+}
+
+
+variable "instance_type" {
+ description = "instance types for different environments"
+  type = list(string)
+  default = ["t2.micro", "t2.medium"]
+}
+
+variable "amis" {
+    description = "AMIs by region"
+    type = map(string)
+     default = {
+                us-east-1 = "ami-087107f9778206adb"
+     }
+}
+variable "keys" {
+    description = "keys by region"
+    type = map(string)
+     default = {
+                us-east-1 = "testkey"
+     }
+}
+
+variable "ssm_document_name" {
+  description = "name of ssm document to join domain."
+  type        = string
+  default     = "ssm_for_genesys"
+}
+
+variable "directory_id" {
+  description = "id of aws directory service AD domain."
+  type        = list(string)
+  default     = ["d-906751111b"]
+}
+
+variable "directory_name" {
+  description = "name of aws directory service AD domain."
+  type        = list(string)
+  default     = ["rajeshtestdomain.com"]
+}
+
+variable "directory_ou" {
+  description = "orgainisational unit of aws directory service AD domain. ie. DC=corp,DC=example,DC=com"
+  type        = list(string)
+  default     = []
+}
+
+variable "dns_ip_addresses" {
+  description = "id of aws directory service AD domain."
+  type        = list(string)
+  default     = ["10.1.1.229", "10.1.2.56"]
+}
+variable "create_bucket" {
+  description = "to create s3 bucket give true"
+  type        = bool
+  default     = true
+}
+
+variable "bucket_name" {
+  description = "this will be the name of bucket"
+  type        = list(string)
+  default     = ["fusersbucket"]
+}
+variable "logging_bucket" {
+  description = "logging_bucket"
+  type        = list(string)
+  default     = ["objectlevelloging"]
+}
+variable "versioning" {
+  description = "give permission for enable versioning"
+  type        = bool
+  default     = true
+}
+#variable "bucket_name" {
+#  description = "give the bucket name"
+#  type        = list(string)
+#  default     = ["fusersbucket"]
+#}
+

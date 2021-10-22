@@ -1,0 +1,13 @@
+aws_region = "us-east-1"
+vpc_cidr = "10.1.0.0/16"
+#public_subnet1_cidr = "10.1.1.0/24"
+#private_subnet_cidr = "10.1.20.0/24"
+Main_Routing_Table = "mrtb1"
+nat_Routing_Table = "nat_table1"
+vpc_name = "test-vpc"
+IGW_name = "igw-project-1"
+private_subnet_name = "Private_Subnet"
+public_subnet1_name = "Public_Subnet1"
+#Main_Routing_Table = "Main_table-testing"
+nat_name = "nat-1"
+
