@@ -1,0 +1,48 @@
+  provisioner "remote-exec" {
+    command = "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+    interpreter = ["PowerShell"]
+    connection {
+      type     = "winrm"
+      user     = "Administrator"
+      password = "${var.admin_password}"
+    }
+  }
+<powershell>
+C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule
+</powershell>
+
+resource "aws_instance" "my-test-instance" {
+  ami             = "${data.aws_ami.ec2-worker-initial-encrypted-ami.id}"
+  instance_type   = "t2.micro"
+
+  tags {
+    Name = "my-test-instance"
+  }
+
+  user_data = "${file(userdata.txt)}"
+}
+
+-------------------------------------------------------------
+powershell script for transfering ebs to s3
+
+data "template_file" "scripts" {
+  template = <<EOF
+<powershell>
+$dlurl = "installpathtoawscli.msi"
+$installerPath = Join-Path $env:TEMP (Split-Path $dlurl -Leaf)
+Invoke-WebRequest $dlurl -OutFile $installerPath
+Start-Process -FilePath msiexec -Args "/i $installerPath /passive" -Verb RunAs -Wait
+mkdir C:\temp
+New-Item -Name 'b.bat' -Path 'C:\temp' -Value 'aws s3 cp s3://mybucketname/myfile.extension C:\temp\extension > C:\temp\test.txt'
+New-Item -Name 'a.bat' -Path 'C:\Users\Administrator' -Value 'mkdir C:\Users\Administrator\.aws
+echo [default]>> C:\Users\Administrator\.aws\credentials
+echo aws_access_key_id = MY_ACCESS_KEY>> C:\Users\Administrator\.aws\credentials
+echo aws_secret_access_key = MY_SECRET_KEY>> C:\Users\Administrator\.aws\credentials
+echo [default]>> C:\Users\Administrator\.aws\config
+echo region = MY_REGION>> C:\Users\Administrator\.aws\config
+echo output = MY_OUTPUT>> C:\Users\Administrator\.aws\config'
+C:\Users\Administrator\a.bat
+C:\temp\b.bat
+</powershell>
+EOF
+}
